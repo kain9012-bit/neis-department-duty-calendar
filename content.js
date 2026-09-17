@@ -597,7 +597,6 @@
           <button type="button" id="jbe-duty-target">대상자 설정</button>
           <button type="button" id="jbe-duty-pending">상신(진행) 숨김</button>
           <button type="button" id="jbe-duty-auto">자동 켬</button>
-          <button type="button" id="jbe-duty-reset">조회정보 초기화</button>
         </div>
       `;
 
@@ -612,7 +611,6 @@
       panel.querySelector("#jbe-duty-target").addEventListener("click", openTargetSettingsModal);
       panel.querySelector("#jbe-duty-pending").addEventListener("click", togglePendingRows);
       panel.querySelector("#jbe-duty-auto").addEventListener("click", toggleAutoLoad);
-      panel.querySelector("#jbe-duty-reset").addEventListener("click", resetTemplate);
       panel.querySelector(".jbe-duty-position-reset").addEventListener("click", resetPanelPosition);
 
       const oldSwitch = document.getElementById("jbe-duty-floating-mode-switch");
@@ -857,14 +855,6 @@
     const total = state.lastRowsByDate ? filteredTotalCount(state.lastRowsByDate) : 0;
     await updatePanelStatus(`${state.includePending ? "승인완료와 상신(진행)" : "승인완료"} 표시 · 현재 ${total}건`);
     showToast(state.includePending ? "상신(진행) 건을 (결재중)으로 함께 표시합니다." : "승인완료 건만 표시합니다.");
-  }
-
-  async function resetTemplate() {
-    await storageRemove([STORAGE_KEYS.template, STORAGE_KEYS.endpoint, STORAGE_KEYS.origin, STORAGE_KEYS.capturedAt]);
-    await clearDutyCaches();
-    clearDutyOverlay();
-    await updatePanelStatus("저장한 조회정보를 초기화했습니다. 일일근무상황조회에서 조회를 한 번 실행하세요.");
-    showToast("저장한 복무 조회정보를 초기화했습니다.");
   }
 
   async function fetchDay(template, endpoint, ymd) {
